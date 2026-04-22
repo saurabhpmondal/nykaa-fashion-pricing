@@ -1,0 +1,1 @@
+import {CSV_URL} from './config.js'; export async function loadRows(){const t=await fetch(CSV_URL).then(r=>r.text());const [h,...lines]=t.trim().split(/\r?\n/);const heads=h.split(',');return lines.map(l=>{const c=l.split(',');return Object.fromEntries(heads.map((x,i)=>[x,c[i]]));});}
