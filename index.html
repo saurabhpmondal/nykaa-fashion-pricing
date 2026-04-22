@@ -1,1 +1,117 @@
-<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Nykaa Fashion Pricing Engine</title><link rel='stylesheet' href='css/reset.css'><link rel='stylesheet' href='css/variables.css'><link rel='stylesheet' href='css/layout.css'><link rel='stylesheet' href='css/components.css'></head><body><header class='topbar'><h1>Nykaa Fashion Pricing Engine</h1><button id='exportBtn'>Export</button></header><section class='filters'><select id='mode'><option>BAU</option><option>EVENT</option></select><select id='tpDiff'><option>All</option><option>TP+5%</option><option>TP+0%</option><option>TP-5%</option><option>TP-10%</option><option>TP-30%</option></select><input id='search' placeholder='Search ERP SKU / SKU'></section><main><div class='table-wrap'><table id='reportTable'><thead><tr><th>ERP SKU</th><th>SKU</th><th>Status</th><th>TP</th><th>MRP</th><th>SP</th><th>TD%</th><th>Payout After CODB</th></tr></thead><tbody></tbody></table></div></main><script type='module' src='js/app.js'></script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nykaa Fashion Pricing Engine</title>
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="topbar">
+    <div class="topbar-left"></div>
+
+    <div class="topbar-center">
+      <h1>Nykaa Fashion Pricing Engine</h1>
+    </div>
+
+    <div class="topbar-right">
+      <button id="exportBtn" class="btn-primary">Export</button>
+    </div>
+  </header>
+
+  <!-- Filters -->
+  <section class="filters-wrap">
+
+    <div class="filter-card">
+      <label>Pricing Mode</label>
+      <select id="modeSelect">
+        <option value="BAU">BAU</option>
+        <option value="EVENT">EVENT</option>
+      </select>
+    </div>
+
+    <div class="filter-card">
+      <label>TP Diff</label>
+      <select id="tpDiffSelect">
+        <option value="ALL">All</option>
+        <option value="5">TP +5%</option>
+        <option value="0">TP +0%</option>
+        <option value="-5">TP -5%</option>
+        <option value="-10">TP -10%</option>
+        <option value="-30">TP -30%</option>
+      </select>
+    </div>
+
+    <div class="filter-card search-card">
+      <label>Search</label>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search ERP SKU / SKU"
+      />
+    </div>
+
+  </section>
+
+  <!-- Summary -->
+  <section class="summary-bar">
+    <div>Total Rows: <span id="rowCount">0</span></div>
+    <div>Mode: <span id="modeLabel">BAU</span></div>
+  </section>
+
+  <!-- Table -->
+  <main class="table-section">
+
+    <div class="table-wrap">
+
+      <table id="reportTable">
+
+        <thead>
+          <tr>
+            <th>ERP SKU</th>
+            <th>SKU</th>
+            <th>Status</th>
+            <th>TP</th>
+            <th>MRP</th>
+            <th>SP</th>
+            <th>TD%</th>
+            <th>Taxable Value</th>
+            <th>GST</th>
+            <th>Commission</th>
+            <th>GST Comm</th>
+            <th>Comm Invoice</th>
+            <th>Forward</th>
+            <th>TCS</th>
+            <th>Bank Settlement</th>
+            <th>TDS</th>
+            <th>Final Payout</th>
+            <th>Marketing</th>
+            <th>Return Charge</th>
+            <th>Return%</th>
+            <th>Return CODB</th>
+            <th>Dispatch</th>
+            <th>Payout After CODB</th>
+            <th>TP Profit %</th>
+            <th>TP Profit ₹</th>
+          </tr>
+        </thead>
+
+        <tbody id="tableBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+
+</body>
+</html>
