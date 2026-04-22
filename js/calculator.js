@@ -21,9 +21,12 @@ import { num, round2 } from "./utils.js";
 /* ----------------------------- */
 
 export function getTargetPercent(mode, status) {
-  const s = String(status || "").trim().toUpperCase();
+  const s = String(status || "")
+    .trim()
+    .toUpperCase();
 
-  const isContinue = s === "CONTINUE";
+  const isContinue =
+    s === "CONTINUE";
 
   if (mode === MODE_BAU) {
     return isContinue ? 5 : 0;
@@ -33,12 +36,14 @@ export function getTargetPercent(mode, status) {
 }
 
 export function getTargetValue(tp, mode, status) {
-  const diff = getTargetPercent(mode, status);
+  const diff =
+    getTargetPercent(mode, status);
+
   return tp * (1 + diff / 100);
 }
 
 /* ----------------------------- */
-/* Commercials from SP */
+/* Commercials */
 /* ----------------------------- */
 
 export function computeFromSP(sp, tp, mrp) {
@@ -46,16 +51,26 @@ export function computeFromSP(sp, tp, mrp) {
   tp = num(tp);
   mrp = num(mrp);
 
-  const taxableValue = sp / (1 + GST_RATE);
-  const gst = sp - taxableValue;
+  const taxableValue =
+    sp / (1 + GST_RATE);
 
-  const commission = sp * COMMISSION_RATE;
-  const gstComm = commission * COMMISSION_GST_RATE;
-  const commInvoice = commission + gstComm;
+  const gst =
+    sp - taxableValue;
 
-  const forward = FORWARD_TOTAL;
+  const commission =
+    sp * COMMISSION_RATE;
 
-  const tcs = taxableValue * TCS_RATE;
+  const gstComm =
+    commission * COMMISSION_GST_RATE;
+
+  const commInvoice =
+    commission + gstComm;
+
+  const forward =
+    FORWARD_TOTAL;
+
+  const tcs =
+    taxableValue * TCS_RATE;
 
   const bankSettlement =
     sp -
@@ -64,21 +79,27 @@ export function computeFromSP(sp, tp, mrp) {
     forward -
     tcs;
 
-  const tds = taxableValue * TDS_RATE;
+  const tds =
+    taxableValue * TDS_RATE;
 
   const finalPayout =
     bankSettlement - tds;
 
-  const marketing = sp * MARKETING_RATE;
+  const marketing =
+    sp * MARKETING_RATE;
 
-  const returnCharge = RETURN_CHARGE;
-  const returnPct = RETURN_PERCENT;
+  const returnCharge =
+    RETURN_CHARGE;
+
+  const returnPct =
+    RETURN_PERCENT;
 
   const returnCODB =
     (returnCharge * returnPct) /
     (100 - returnPct);
 
-  const dispatch = DISPATCH_COST;
+  const dispatch =
+    DISPATCH_COST;
 
   const payoutAfterCODB =
     finalPayout -
@@ -87,10 +108,14 @@ export function computeFromSP(sp, tp, mrp) {
     returnCODB -
     dispatch;
 
-  const td =
+  const tdRaw =
     mrp > 0
       ? ((mrp - sp) / mrp) * 100
       : 0;
+
+  /* FLOOR ROUND DOWN */
+  const td =
+    Math.floor(tdRaw);
 
   const tpProfitRs =
     payoutAfterCODB - tp;
@@ -102,7 +127,7 @@ export function computeFromSP(sp, tp, mrp) {
 
   return {
     sp: round2(sp),
-    td: round2(td),
+    td: td,
 
     taxableValue: round2(taxableValue),
     gst: round2(gst),
@@ -127,51 +152,65 @@ export function computeFromSP(sp, tp, mrp) {
 
     dispatch: round2(dispatch),
 
-    payoutAfterCODB: round2(payoutAfterCODB),
+    payoutAfterCODB:
+      round2(payoutAfterCODB),
 
-    tpProfitRs: round2(tpProfitRs),
-    tpProfitPct: round2(tpProfitPct)
+    tpProfitRs:
+      round2(tpProfitRs),
+
+    tpProfitPct:
+      round2(tpProfitPct)
   };
 }
 
 /* ----------------------------- */
-/* Reverse Solve SP */
+/* Reverse Solve */
 /* ----------------------------- */
 
-export function solveSP(tp, mrp, mode, status) {
+export function solveSP(
+  tp,
+  mrp,
+  mode,
+  status
+) {
   tp = num(tp);
   mrp = num(mrp);
 
-  const target = getTargetValue(
-    tp,
-    mode,
-    status
-  );
+  const target =
+    getTargetValue(
+      tp,
+      mode,
+      status
+    );
 
   let best = null;
-  let minGap = Infinity;
+  let gapMin = Infinity;
 
   const maxSP =
-    mrp > 0 ? mrp : SOLVER_MAX;
+    mrp > 0
+      ? mrp
+      : SOLVER_MAX;
 
   for (
     let sp = 1;
     sp <= maxSP;
     sp += SOLVER_STEP
   ) {
-    const calc = computeFromSP(
-      sp,
-      tp,
-      mrp
-    );
+    const row =
+      computeFromSP(
+        sp,
+        tp,
+        mrp
+      );
 
     const gap = Math.abs(
-      calc.payoutAfterCODB - target
+      row.payoutAfterCODB -
+      target
     );
 
-    if (gap < minGap) {
-      minGap = gap;
-      best = calc;
+    if (gap < gapMin) {
+      gapMin = gap;
+      best = row;
     }
   }
 
