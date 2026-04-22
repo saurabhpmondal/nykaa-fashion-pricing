@@ -1,13 +1,15 @@
-import { includesText, lower } from "./utils.js";
+import { lower, includesText } from "./utils.js";
 import { getTargetPercent } from "./calculator.js";
 
 /* -------------------------------- */
-/* Search + Dropdown Filters */
+/* Search + Status + TP Diff Filter */
 /* -------------------------------- */
 
 export function applyFilters(rows, state) {
   const query = lower(state.search);
+  const mode = state.mode;
   const tpDiff = String(state.tpDiff || "ALL");
+  const status = lower(state.status || "ALL");
 
   return rows.filter(row => {
     /* Search */
@@ -18,14 +20,50 @@ export function applyFilters(rows, state) {
 
     if (!matchSearch) return false;
 
-    /* TP Diff */
-    if (tpDiff === "ALL") return true;
+    /* Status */
+    if (
+      status !== "all" &&
+      lower(row.erp_status) !== status
+    ) {
+      return false;
+    }
 
-    const diff = getTargetPercent(
-      state.mode,
-      row.erp_status
-    );
+    /* EVENT ignores TP Diff */
+    if (mode === "EVENT") {
+      return true;
+    }
+
+    /* BAU TP Diff */
+    if (tpDiff === "ALL") {
+      return true;
+    }
+
+    const diff =
+      getTargetPercent(
+        mode,
+        row.erp_status
+      );
 
     return String(diff) === tpDiff;
   });
+}
+
+/* -------------------------------- */
+/* Dynamic Status List */
+/* -------------------------------- */
+
+export function getStatuses(rows) {
+  const map = {};
+
+  rows.forEach(row => {
+    const val =
+      String(row.erp_status || "")
+        .trim();
+
+    if (val) {
+      map[val] = true;
+    }
+  });
+
+  return Object.keys(map).sort();
 }
