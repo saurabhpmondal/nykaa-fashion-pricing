@@ -1,25 +1,33 @@
 import { loadRows } from "./fetcher.js";
 import { solveSP } from "./calculator.js";
-import { applyFilters } from "./filters.js";
+import {
+  applyFilters,
+  getStatuses
+} from "./filters.js";
 import { renderTable } from "./ui.js";
 import { exportVisibleTable } from "./exporter.js";
 import { num } from "./utils.js";
 
 /* ---------------------------- */
-/* Global State */
+/* State */
 /* ---------------------------- */
 
 let rawRows = [];
 let finalRows = [];
+let filteredRows = [];
+
+let visibleLimit = 50;
+let searchTimer = null;
 
 const state = {
   mode: "BAU",
   tpDiff: "ALL",
+  status: "ALL",
   search: ""
 };
 
 /* ---------------------------- */
-/* Build Final Data */
+/* Build Engine Rows */
 /* ---------------------------- */
 
 function buildRows() {
@@ -27,7 +35,7 @@ function buildRows() {
     const tp = num(row.tp);
     const mrp = num(row.mrp);
 
-    const result = solveSP(
+    const calc = solveSP(
       tp,
       mrp,
       state.mode,
@@ -37,32 +45,77 @@ function buildRows() {
     return {
       erp_sku: row.erp_sku || "",
       sku: row.sku || "",
-      erp_status: row.erp_status || "",
+      erp_status:
+        row.erp_status || "",
       tp,
       mrp,
-      ...result
+      ...calc
     };
   });
 }
 
 /* ---------------------------- */
-/* Render */
+/* Status Dropdown */
+/* ---------------------------- */
+
+function populateStatus() {
+  const el =
+    document.getElementById(
+      "statusSelect"
+    );
+
+  const statuses =
+    getStatuses(rawRows);
+
+  el.innerHTML =
+    `<option value="ALL">All</option>` +
+    statuses
+      .map(s => `
+        <option value="${s}">
+          ${s}
+        </option>
+      `)
+      .join("");
+}
+
+/* ---------------------------- */
+/* Refresh */
 /* ---------------------------- */
 
 function refresh() {
   buildRows();
 
-  const filtered =
-    applyFilters(finalRows, state);
+  filteredRows =
+    applyFilters(
+      finalRows,
+      state
+    );
 
-  renderTable(filtered);
+  renderTable(
+    filteredRows,
+    visibleLimit
+  );
 
   const modeLabel =
-    document.getElementById("modeLabel");
+    document.getElementById(
+      "modeLabel"
+    );
 
-  if (modeLabel) {
-    modeLabel.textContent =
-      state.mode;
+  modeLabel.textContent =
+    state.mode;
+
+  const tpDiffSelect =
+    document.getElementById(
+      "tpDiffSelect"
+    );
+
+  if (
+    state.mode === "EVENT"
+  ) {
+    tpDiffSelect.disabled = true;
+    tpDiffSelect.value = "ALL";
+  } else {
+    tpDiffSelect.disabled = false;
   }
 }
 
@@ -71,54 +124,97 @@ function refresh() {
 /* ---------------------------- */
 
 function bindEvents() {
-  const modeSelect =
-    document.getElementById(
+  document
+    .getElementById(
       "modeSelect"
+    )
+    .addEventListener(
+      "change",
+      e => {
+        state.mode =
+          e.target.value;
+
+        visibleLimit = 50;
+        refresh();
+      }
     );
 
-  const tpDiffSelect =
-    document.getElementById(
+  document
+    .getElementById(
       "tpDiffSelect"
+    )
+    .addEventListener(
+      "change",
+      e => {
+        state.tpDiff =
+          e.target.value;
+
+        visibleLimit = 50;
+        refresh();
+      }
     );
 
-  const searchInput =
-    document.getElementById(
+  document
+    .getElementById(
+      "statusSelect"
+    )
+    .addEventListener(
+      "change",
+      e => {
+        state.status =
+          e.target.value;
+
+        visibleLimit = 50;
+        refresh();
+      }
+    );
+
+  document
+    .getElementById(
       "searchInput"
+    )
+    .addEventListener(
+      "input",
+      e => {
+        clearTimeout(
+          searchTimer
+        );
+
+        searchTimer =
+          setTimeout(() => {
+            state.search =
+              e.target.value;
+
+            visibleLimit = 50;
+            refresh();
+          }, 250);
+      }
     );
 
-  const exportBtn =
-    document.getElementById(
+  document
+    .getElementById(
+      "loadMoreBtn"
+    )
+    .addEventListener(
+      "click",
+      () => {
+        visibleLimit += 50;
+
+        renderTable(
+          filteredRows,
+          visibleLimit
+        );
+      }
+    );
+
+  document
+    .getElementById(
       "exportBtn"
+    )
+    .addEventListener(
+      "click",
+      exportVisibleTable
     );
-
-  modeSelect.addEventListener(
-    "change",
-    e => {
-      state.mode = e.target.value;
-      refresh();
-    }
-  );
-
-  tpDiffSelect.addEventListener(
-    "change",
-    e => {
-      state.tpDiff = e.target.value;
-      refresh();
-    }
-  );
-
-  searchInput.addEventListener(
-    "input",
-    e => {
-      state.search = e.target.value;
-      refresh();
-    }
-  );
-
-  exportBtn.addEventListener(
-    "click",
-    exportVisibleTable
-  );
 }
 
 /* ---------------------------- */
@@ -128,6 +224,7 @@ function bindEvents() {
 async function init() {
   rawRows = await loadRows();
 
+  populateStatus();
   bindEvents();
   refresh();
 }
