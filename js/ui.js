@@ -6,13 +6,16 @@ function profitClass(value) {
     : "profit-neg";
 }
 
-export function renderTable(rows) {
+export function renderTable(rows, limit) {
   const body =
     document.getElementById("tableBody");
 
   if (!body) return;
 
-  body.innerHTML = rows.map(row => `
+  const visible =
+    rows.slice(0, limit);
+
+  body.innerHTML = visible.map(row => `
     <tr>
       <td>${row.erp_sku}</td>
       <td>${row.sku}</td>
@@ -22,7 +25,7 @@ export function renderTable(rows) {
       <td>${money(row.mrp)}</td>
 
       <td>${money(row.sp)}</td>
-      <td>${pct(row.td)}</td>
+      <td>${row.td}</td>
 
       <td>${money(row.taxableValue)}</td>
       <td>${money(row.gst)}</td>
@@ -64,7 +67,28 @@ export function renderTable(rows) {
   const rowCount =
     document.getElementById("rowCount");
 
+  const visibleCount =
+    document.getElementById("visibleCount");
+
   if (rowCount) {
-    rowCount.textContent = rows.length;
+    rowCount.textContent =
+      rows.length;
+  }
+
+  if (visibleCount) {
+    visibleCount.textContent =
+      visible.length;
+  }
+
+  const loadMoreBtn =
+    document.getElementById(
+      "loadMoreBtn"
+    );
+
+  if (loadMoreBtn) {
+    loadMoreBtn.style.display =
+      rows.length > limit
+        ? "inline-flex"
+        : "none";
   }
 }
