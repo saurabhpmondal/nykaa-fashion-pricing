@@ -5,7 +5,7 @@ import {
   getStatuses
 } from "./filters.js";
 import { renderTable } from "./ui.js";
-import { exportVisibleTable } from "./exporter.js";
+import { exportRows } from "./exporter.js";
 import { num } from "./utils.js";
 
 /* ---------------------------- */
@@ -96,12 +96,9 @@ function refresh() {
     visibleLimit
   );
 
-  const modeLabel =
-    document.getElementById(
-      "modeLabel"
-    );
-
-  modeLabel.textContent =
+  document.getElementById(
+    "modeLabel"
+  ).textContent =
     state.mode;
 
   const tpDiffSelect =
@@ -213,7 +210,11 @@ function bindEvents() {
     )
     .addEventListener(
       "click",
-      exportVisibleTable
+      () => {
+        exportRows(
+          filteredRows
+        );
+      }
     );
 }
 
@@ -222,7 +223,8 @@ function bindEvents() {
 /* ---------------------------- */
 
 async function init() {
-  rawRows = await loadRows();
+  rawRows =
+    await loadRows();
 
   populateStatus();
   bindEvents();
