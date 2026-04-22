@@ -1,0 +1,1 @@
+export function apply(rows,q){q=q.toLowerCase();return rows.filter(r=>!q||r.erp_sku.toLowerCase().includes(q)||r.sku.toLowerCase().includes(q));}
