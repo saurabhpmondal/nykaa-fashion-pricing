@@ -1,0 +1,1 @@
+export function exportTable(){const table=document.getElementById('reportTable');let csv='';[...table.rows].forEach(r=>{csv+=[...r.cells].map(c=>c.innerText).join(',')+'\n'});const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='nykaa-pricing.csv';a.click();}
