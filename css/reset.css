@@ -1,1 +1,35 @@
-*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif}
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  line-height: 1.4;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  outline: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
