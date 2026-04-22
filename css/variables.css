@@ -1,1 +1,28 @@
-:root{--bg:#f6f7fb;--card:#fff;--text:#111;--line:#e5e7eb;--radius:14px}
+:root {
+
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --card-2: #f9fafb;
+
+  --text: #111827;
+  --text-light: #6b7280;
+
+  --line: #e5e7eb;
+  --line-dark: #d1d5db;
+
+  --primary: #111827;
+  --primary-hover: #000000;
+
+  --green: #15803d;
+  --red: #dc2626;
+  --blue: #2563eb;
+
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+  --shadow-md: 0 10px 24px rgba(0,0,0,0.08);
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  --header-h: 72px;
+}
