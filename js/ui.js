@@ -1,0 +1,1 @@
+export function render(rows){const tb=document.querySelector('#reportTable tbody');tb.innerHTML=rows.map(r=>`<tr><td>${r.erp_sku}</td><td>${r.sku}</td><td>${r.erp_status}</td><td>${r.tp}</td><td>${r.mrp}</td><td>${r.sp}</td><td>${r.td}</td><td>${r.payout}</td></tr>`).join('');}
