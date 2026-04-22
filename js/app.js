@@ -212,7 +212,8 @@ function bindEvents() {
       "click",
       () => {
         exportRows(
-          filteredRows
+          filteredRows,
+          state
         );
       }
     );
