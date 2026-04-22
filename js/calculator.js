@@ -1,0 +1,1 @@
+export function calc(row){const tp=+row.tp||0,mrp=+row.mrp||0;const sp=Math.min(mrp,tp*1.5);const td=mrp?((mrp-sp)/mrp*100):0;return {...row,sp:sp.toFixed(2),td:td.toFixed(2),payout:(tp*1.05).toFixed(2)};}
