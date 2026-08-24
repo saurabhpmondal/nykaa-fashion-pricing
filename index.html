@@ -77,45 +77,57 @@
 
   <!-- PRICING ENGINE -->
   <section id="viewPricing" class="app-view active">
-    <!-- PRICING CONTROLS TOOLBAR (Exact Requested Sequence) -->
-    <section class="pricing-toolbar-wrap">
+    <!-- PRICING CONTROLS TOOLBAR -->
+    <section class="pricing-toolbar-panel">
       <!-- 1. Pricing Mode -->
-      <div class="filter-card">
-        <label for="modeSelect">Pricing Mode</label>
-        <select id="modeSelect">
-          <option value="BAU">BAU</option>
-          <option value="EVENT">EVENT</option>
-          <option value="BIG EVENT">BIG EVENT</option>
-        </select>
+      <div class="toolbar-item toolbar-item-select">
+        <label for="modeSelect" class="toolbar-label">Pricing Mode</label>
+        <div class="select-wrapper">
+          <select id="modeSelect" class="toolbar-select">
+            <option value="BAU">BAU</option>
+            <option value="EVENT">EVENT</option>
+            <option value="BIG EVENT">BIG EVENT</option>
+          </select>
+          <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
       </div>
 
       <!-- 2. Continue TP Diff -->
-      <div class="filter-card">
-        <label for="continueTpDiffSelect">Continue TP Diff</label>
-        <select id="continueTpDiffSelect">
-          <option value="5">+5%</option>
-          <option value="0">0%</option>
-        </select>
+      <div class="toolbar-item toolbar-item-select">
+        <label for="continueTpDiffSelect" class="toolbar-label">Continue TP Diff</label>
+        <div class="select-wrapper">
+          <select id="continueTpDiffSelect" class="toolbar-select">
+            <option value="5">+5%</option>
+            <option value="0">0%</option>
+          </select>
+          <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
       </div>
 
       <!-- 3. Non-Continue TP Diff -->
-      <div class="filter-card">
-        <label for="nonContinueTpDiffSelect">Non-Continue TP Diff</label>
-        <select id="nonContinueTpDiffSelect">
-          <option value="0">0%</option>
-          <option value="-10">-10%</option>
-        </select>
+      <div class="toolbar-item toolbar-item-select">
+        <label for="nonContinueTpDiffSelect" class="toolbar-label">Non-Continue TP Diff</label>
+        <div class="select-wrapper">
+          <select id="nonContinueTpDiffSelect" class="toolbar-select">
+            <option value="0">0%</option>
+            <option value="-10">-10%</option>
+          </select>
+          <svg class="select-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
       </div>
 
       <!-- 4. Search box -->
-      <div class="filter-card search-card">
-        <label for="searchInput">Search SKU</label>
-        <input type="text" id="searchInput" placeholder="Search ERP SKU / SKU / Title">
+      <div class="toolbar-item toolbar-item-search">
+        <label for="searchInput" class="toolbar-label">Search Catalog</label>
+        <div class="search-input-wrapper">
+          <svg class="search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="searchInput" class="toolbar-input" placeholder="Search SKU, ERP SKU, Title...">
+        </div>
       </div>
 
       <!-- 5. NYRI Toggle Button -->
-      <div class="filter-card nyri-toggle-card">
-        <label for="nyriToggleBtn">NYRI Filter</label>
+      <div class="toolbar-item toolbar-item-toggle">
+        <label for="nyriToggleBtn" class="toolbar-label">NYRI Filter</label>
         <button id="nyriToggleBtn" type="button" class="btn-nyri-toggle" aria-pressed="false" title="Toggle NYRI SKUs: When active, only shows & prices SKUs starting with NYRI. When inactive, NYRI SKUs are excluded from pricing.">
           <span class="nyri-toggle-switch">
             <span class="nyri-toggle-thumb"></span>
@@ -125,37 +137,43 @@
       </div>
 
       <!-- 6. Generate Prices Button -->
-      <div class="btn-action-cell">
+      <div class="toolbar-item toolbar-item-btn">
+        <span class="toolbar-label-spacer" aria-hidden="true">&nbsp;</span>
         <button id="generatePricesBtn" class="btn-generate-prices" title="Configure and generate pricing for catalog SKUs">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           <span id="generatePricesBtnText">Generate Prices</span>
         </button>
       </div>
 
       <!-- 7. Download CSV -->
-      <div class="btn-action-cell">
+      <div class="toolbar-item toolbar-item-btn">
+        <span class="toolbar-label-spacer" aria-hidden="true">&nbsp;</span>
         <button id="exportBtn" class="btn-secondary" title="Export current calculated pricing table to CSV">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           <span>Download CSV</span>
         </button>
       </div>
     </section>
 
     <!-- SUMMARY & STATUS FILTER BAR -->
-    <section class="summary-bar" style="justify-content: space-between;">
-      <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
-        <div>Total Rows: <span id="rowCount" class="font-bold text-dark">0</span></div>
-        <div>Showing: <span id="visibleCount" class="font-bold text-dark">0</span></div>
-        <div>Mode: <span id="modeLabel" class="badge badge-info">BAU</span></div>
-        <div>Continue Target: <span id="continueDiffLabel" class="badge badge-success">+5%</span></div>
-        <div>Non-Continue Target: <span id="nonContinueDiffLabel" class="badge badge-warning">0%</span></div>
-        <div>NYRI: <span id="nyriStatusLabel" class="badge badge-neutral">OFF (Excluded)</span></div>
+    <section class="summary-bar">
+      <div class="summary-pills-group">
+        <div class="summary-stat"><span class="summary-stat-label">Total SKUs:</span> <span id="rowCount" class="summary-stat-val">0</span></div>
+        <div class="summary-stat"><span class="summary-stat-label">Showing:</span> <span id="visibleCount" class="summary-stat-val">0</span></div>
+        <div class="summary-divider"></div>
+        <div class="summary-pill-item"><span class="pill-label">Mode:</span> <span id="modeLabel" class="badge badge-info">BAU</span></div>
+        <div class="summary-pill-item"><span class="pill-label">Continue:</span> <span id="continueDiffLabel" class="badge badge-success">+5%</span></div>
+        <div class="summary-pill-item"><span class="pill-label">Non-Continue:</span> <span id="nonContinueDiffLabel" class="badge badge-warning">0%</span></div>
+        <div class="summary-pill-item"><span class="pill-label">NYRI:</span> <span id="nyriStatusLabel" class="badge badge-neutral">OFF (Excluded)</span></div>
       </div>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <label for="statusSelect" style="font-size: 12px; font-weight: 600; color: var(--text-muted);">Status Filter:</label>
-        <select id="statusSelect" style="padding: 5px 10px; font-size: 12px; border-radius: 6px; border: 1px solid var(--line);">
-          <option value="ALL">All Statuses</option>
-        </select>
+      <div class="summary-filter-right">
+        <label for="statusSelect" class="status-filter-label">ERP Status Filter:</label>
+        <div class="status-select-wrap">
+          <select id="statusSelect" class="status-filter-select">
+            <option value="ALL">All Statuses</option>
+          </select>
+          <svg class="select-chevron-sm" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
       </div>
     </section>
 

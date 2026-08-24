@@ -343,17 +343,6 @@ body {
   justify-content: flex-end;
 }
 
-/* Summary Bar */
-.summary-bar {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-bottom: 16px;
-  color: var(--text-muted);
-  font-size: 13px;
-  font-weight: 600;
-}
-
 /* Table Section */
 .table-section {
   display: flex;

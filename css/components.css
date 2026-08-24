@@ -470,40 +470,146 @@ tbody tr:hover {
   transform: scale(0.97);
 }
 
-/* Pricing Controls Toolbar Grid */
-.pricing-toolbar-wrap {
+/* Modern Pricing Controls Toolbar Panel */
+.pricing-toolbar-panel {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
   display: grid;
-  grid-template-columns: 160px 160px 170px minmax(200px, 1fr) auto auto auto;
+  grid-template-columns: 140px 140px 150px minmax(200px, 1fr) auto auto auto;
   gap: 12px;
   align-items: flex-end;
-  margin-bottom: 16px;
 }
 
-.pricing-toolbar-wrap .filter-card {
-  height: 100%;
+.toolbar-item {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 6px;
+}
+
+.toolbar-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 0;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+.toolbar-label-spacer {
+  display: block;
+  font-size: 10.5px;
+  line-height: 1;
+  visibility: hidden;
+  user-select: none;
+}
+
+/* Custom Select with Chevron */
+.select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.toolbar-select {
+  width: 100%;
+  height: 38px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0 30px 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.toolbar-select:hover {
+  background: #ffffff;
+  border-color: var(--line-dark);
+}
+
+.toolbar-select:focus {
+  background: #ffffff;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  outline: none;
+}
+
+.select-chevron {
+  position: absolute;
+  right: 11px;
+  pointer-events: none;
+  color: var(--text-muted);
+  transition: transform 0.15s ease;
+}
+
+/* Search Box with Embedded Icon */
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  pointer-events: none;
+  color: var(--text-muted);
+}
+
+.toolbar-input {
+  width: 100%;
+  height: 38px;
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 0 12px 0 34px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  transition: all 0.15s ease;
+}
+
+.toolbar-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.toolbar-input:hover {
+  background: #ffffff;
+  border-color: var(--line-dark);
+}
+
+.toolbar-input:focus {
+  background: #ffffff;
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  outline: none;
 }
 
 /* NYRI Toggle Button */
-.nyri-toggle-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
 .btn-nyri-toggle {
-  height: 42px;
+  height: 38px;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 0 14px;
+  gap: 8px;
+  padding: 0 12px;
   background: #f8fafc;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
@@ -512,14 +618,14 @@ tbody tr:hover {
 }
 
 .btn-nyri-toggle:hover {
-  background: #f1f5f9;
-  border-color: #cbd5e1;
+  background: #ffffff;
+  border-color: var(--line-dark);
   color: var(--text);
 }
 
 .nyri-toggle-switch {
-  width: 32px;
-  height: 18px;
+  width: 28px;
+  height: 16px;
   background: #cbd5e1;
   border-radius: 20px;
   position: relative;
@@ -529,15 +635,15 @@ tbody tr:hover {
 }
 
 .nyri-toggle-thumb {
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   background: #ffffff;
   border-radius: 50%;
   position: absolute;
   top: 2px;
   left: 2px;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .btn-nyri-toggle.active {
@@ -552,42 +658,54 @@ tbody tr:hover {
 }
 
 .btn-nyri-toggle.active .nyri-toggle-thumb {
-  transform: translateX(14px);
+  transform: translateX(12px);
 }
 
 .text-pink {
   color: #db2777;
 }
 
-.pricing-toolbar-wrap .btn-action-cell {
-  background: transparent;
-  border: none;
-  padding: 0;
-  box-shadow: none;
-  display: flex;
-  align-items: flex-end;
-}
-
-.pricing-toolbar-wrap .btn-generate-prices {
-  height: 42px;
-  padding: 0 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  white-space: nowrap;
-}
-
-.pricing-toolbar-wrap .btn-secondary {
-  height: 42px;
+/* Action Buttons */
+.pricing-toolbar-panel .btn-generate-prices {
+  height: 38px;
   padding: 0 18px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background: #ffffff;
+  gap: 7px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(37, 99, 235, 0.2);
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.pricing-toolbar-panel .btn-generate-prices:hover {
+  background: #1d4ed8;
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+  transform: translateY(-1px);
+}
+
+.pricing-toolbar-panel .btn-generate-prices:active {
+  transform: translateY(0);
+}
+
+.pricing-toolbar-panel .btn-secondary {
+  height: 38px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: #f8fafc;
   border: 1px solid var(--line);
   color: var(--text);
+  font-size: 13px;
   font-weight: 600;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -595,10 +713,140 @@ tbody tr:hover {
   white-space: nowrap;
 }
 
-.pricing-toolbar-wrap .btn-secondary:hover {
+.pricing-toolbar-panel .btn-secondary:hover {
+  background: #ffffff;
+  border-color: var(--line-dark);
+  color: var(--blue);
+}
+
+/* Responsive Toolbar */
+@media (max-width: 1200px) {
+  .pricing-toolbar-panel {
+    grid-template-columns: repeat(3, 1fr) minmax(180px, 1fr) auto auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .pricing-toolbar-panel {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Refined Summary Bar */
+.summary-bar {
+  background: #ffffff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: var(--shadow-sm);
+  font-size: 12px;
+}
+
+.summary-pills-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.summary-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+}
+
+.summary-stat-label {
+  font-weight: 600;
+}
+
+.summary-stat-val {
+  font-weight: 700;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--card-2);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.summary-divider {
+  width: 1px;
+  height: 18px;
+  background: var(--line);
+  margin: 0 2px;
+}
+
+.summary-pill-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pill-label {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.summary-filter-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-filter-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0;
+  white-space: nowrap;
+}
+
+.status-select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.status-filter-select {
+  height: 32px;
+  padding: 0 26px 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--line);
   background: #f8fafc;
-  border-color: #cbd5e1;
-  color: var(--primary);
+  color: var(--text);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.status-filter-select:hover {
+  background: #ffffff;
+  border-color: var(--line-dark);
+}
+
+.status-filter-select:focus {
+  border-color: var(--blue);
+  background: #ffffff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
+}
+
+.select-chevron-sm {
+  position: absolute;
+  right: 8px;
+  pointer-events: none;
+  color: var(--text-muted);
 }
 
 /* Confirmation Modal Dialog */
