@@ -20,24 +20,55 @@ import { num, round2 } from "./utils.js";
 /* Target Logic */
 /* ----------------------------- */
 
-export function getTargetPercent(mode, status) {
+export function getTargetPercent(mode, status, continueTpDiff = null, nonContinueTpDiff = null) {
   const s = String(status || "")
     .trim()
     .toUpperCase();
 
-  const isContinue =
-    s === "CONTINUE";
+  const isContinue = s === "CONTINUE";
+  const normalizedMode = String(mode || "BAU").trim().toUpperCase();
 
-  if (mode === MODE_BAU) {
-    return isContinue ? 5 : 0;
+  if (isContinue) {
+    if (continueTpDiff !== null && continueTpDiff !== undefined && continueTpDiff !== "" && continueTpDiff !== "ALL") {
+      const parsed = parseFloat(continueTpDiff);
+      if (!isNaN(parsed)) {
+        return parsed;
+      }
+    }
+    if (normalizedMode === "BIG EVENT" || normalizedMode === "BIG_EVENT") {
+      return -15;
+    }
+    if (normalizedMode === "EVENT") {
+      return -10;
+    }
+    return 5; // BAU default
+  } else {
+    // Non-Continue
+    if (nonContinueTpDiff !== null && nonContinueTpDiff !== undefined && nonContinueTpDiff !== "" && nonContinueTpDiff !== "ALL") {
+      const parsed = parseFloat(nonContinueTpDiff);
+      if (!isNaN(parsed)) {
+        return parsed;
+      }
+    } else if (continueTpDiff !== null && continueTpDiff !== undefined && continueTpDiff !== "" && continueTpDiff !== "ALL" && (nonContinueTpDiff === null || nonContinueTpDiff === undefined)) {
+      // If legacy single tpDiff parameter was passed
+      const parsed = parseFloat(continueTpDiff);
+      if (!isNaN(parsed)) {
+        return parsed;
+      }
+    }
+
+    if (normalizedMode === "BIG EVENT" || normalizedMode === "BIG_EVENT") {
+      return -40;
+    }
+    if (normalizedMode === "EVENT") {
+      return -20;
+    }
+    return 0; // BAU default
   }
-
-  return isContinue ? -10 : -30;
 }
 
-export function getTargetValue(tp, mode, status) {
-  const diff =
-    getTargetPercent(mode, status);
+export function getTargetValue(tp, mode, status, continueTpDiff = null, nonContinueTpDiff = null) {
+  const diff = getTargetPercent(mode, status, continueTpDiff, nonContinueTpDiff);
 
   return tp * (1 + diff / 100);
 }
@@ -171,17 +202,15 @@ export function solveSP(
   tp,
   mrp,
   mode,
-  status
+  status,
+  continueTpDiff = null,
+  nonContinueTpDiff = null
 ) {
   tp = num(tp);
   mrp = num(mrp);
 
-  const target =
-    getTargetValue(
-      tp,
-      mode,
-      status
-    );
+  const targetPct = getTargetPercent(mode, status, continueTpDiff, nonContinueTpDiff);
+  const target = getTargetValue(tp, mode, status, continueTpDiff, nonContinueTpDiff);
 
   let best = null;
   let gapMin = Infinity;
@@ -216,6 +245,7 @@ export function solveSP(
 
   return {
     target: round2(target),
+    targetPercent: targetPct,
     ...best
   };
 }

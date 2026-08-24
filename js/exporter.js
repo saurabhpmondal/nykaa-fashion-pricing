@@ -26,23 +26,11 @@ function cleanName(v) {
     .replace(/\s+/g, "_");
 }
 
-function targetRule(mode, status) {
-  const s = String(status || "")
-    .trim()
-    .toUpperCase();
-
-  const isContinue =
-    s === "CONTINUE";
-
-  if (mode === "BAU") {
-    return isContinue
-      ? "TP+5%"
-      : "TP+0%";
+function targetRule(mode, status, rowTargetPercent) {
+  if (typeof rowTargetPercent === "number") {
+    return rowTargetPercent >= 0 ? `TP+${rowTargetPercent}%` : `TP${rowTargetPercent}%`;
   }
-
-  return isContinue
-    ? "TP-10%"
-    : "TP-30%";
+  return `TP`;
 }
 
 export function exportRows(
@@ -63,12 +51,16 @@ export function exportRows(
   const now =
     getNowParts();
 
+  const nyriTag = state.nyriOnly ? "_nyri_only" : "";
+
   const fileName =
     `nykaa_${cleanName(
       state.mode
-    )}_${cleanName(
-      state.status
-    )}_${now.stamp}.csv`;
+    )}_cont_${cleanName(
+      state.continueTpDiff
+    )}_noncont_${cleanName(
+      state.nonContinueTpDiff
+    )}${nyriTag}_${now.stamp}.csv`;
 
   const lines = [];
 
@@ -86,10 +78,16 @@ export function exportRows(
     `"Pricing Mode","${state.mode}"`
   );
   lines.push(
-    `"TP Diff Filter","${state.tpDiff}"`
+    `"Continue TP Diff","${state.continueTpDiff >= 0 ? '+' : ''}${state.continueTpDiff}%"`
   );
   lines.push(
-    `"Status Filter","${state.status}"`
+    `"Non-Continue TP Diff","${state.nonContinueTpDiff >= 0 ? '+' : ''}${state.nonContinueTpDiff}%"`
+  );
+  lines.push(
+    `"NYRI Filter","${state.nyriOnly ? 'NYRI SKUs Only' : 'Standard SKUs (NYRI Excluded)'}"`
+  );
+  lines.push(
+    `"Status Filter","${state.status || "ALL"}"`
   );
   lines.push(
     `"Search Filter","${state.search || "All"}"`
@@ -137,7 +135,8 @@ export function exportRows(
       row.erp_status,
       targetRule(
         state.mode,
-        row.erp_status
+        row.erp_status,
+        row.targetPercent
       ),
       row.tp,
       row.mrp,
