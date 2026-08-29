@@ -83,11 +83,11 @@ function getCalculatedPricingRows(mode, continueTpDiff, nonContinueTpDiff, nyriO
     return cached;
   }
 
-  // Filter: ONLY generate price where sku column has value AND tp > 0, respecting NYRI toggle
+  // Filter: ONLY generate price where sku identifier exists AND tp is a number, respecting NYRI toggle
   const validRows = rawPricingRows.filter(row => {
-    const sku = (row.sku || row.SKU || "").trim();
+    const sku = (row.sku || row.SKU || row.erp_sku || "").trim();
     const tp = parseFloat(row.tp);
-    if (!sku || isNaN(tp) || tp <= 0) return false;
+    if (!sku || isNaN(tp)) return false;
 
     const isNyri = isNyriSku(row);
     if (nyriOnly && !isNyri) return false;
@@ -248,13 +248,13 @@ function openConfirmModal() {
   if (skuCountEl) {
     const nyriOnly = Boolean(pricingState.nyriOnly);
     const validCount = rawPricingRows.filter(r => {
-      const sku = (r.sku || r.SKU || "").trim();
+      const sku = (r.sku || r.SKU || r.erp_sku || "").trim();
       const tp = parseFloat(r.tp);
-      if (!sku || isNaN(tp) || tp <= 0) return false;
+      if (!sku || isNaN(tp)) return false;
       const isNyri = isNyriSku(r);
       return nyriOnly ? isNyri : !isNyri;
     }).length;
-    skuCountEl.textContent = `${validCount.toLocaleString()} Eligible SKUs (TP > 0)`;
+    skuCountEl.textContent = `${validCount.toLocaleString()} Eligible SKUs`;
   }
 
   modal.style.display = "flex";
@@ -285,9 +285,9 @@ async function runPriceEngine(forceRefresh = false) {
 
     const nyriOnly = Boolean(pricingState.nyriOnly);
     const validRows = rawPricingRows.filter(r => {
-      const sku = (r.sku || r.SKU || "").trim();
+      const sku = (r.sku || r.SKU || r.erp_sku || "").trim();
       const tp = parseFloat(r.tp);
-      if (!sku || isNaN(tp) || tp <= 0) return false;
+      if (!sku || isNaN(tp)) return false;
       const isNyri = isNyriSku(r);
       return nyriOnly ? isNyri : !isNyri;
     });
@@ -510,9 +510,9 @@ async function init(forceRefresh = false) {
 
     const nyriOnly = Boolean(pricingState.nyriOnly);
     const validRows = rawPricingRows.filter(r => {
-      const sku = (r.sku || r.SKU || "").trim();
+      const sku = (r.sku || r.SKU || r.erp_sku || "").trim();
       const tp = parseFloat(r.tp);
-      if (!sku || isNaN(tp) || tp <= 0) return false;
+      if (!sku || isNaN(tp)) return false;
       const isNyri = isNyriSku(r);
       return nyriOnly ? isNyri : !isNyri;
     });

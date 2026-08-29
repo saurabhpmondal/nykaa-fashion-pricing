@@ -77,11 +77,12 @@ export async function loadRows(forceRefresh = false) {
 
   const allRows = rows || [];
   
-  // Only keep where sku column has value, and having tp > 0
+  // Only keep where sku column has any identifier
   const validRows = allRows.filter(row => {
-    const sku = (row.sku || row.SKU || "").trim();
+    const sku = (row.sku || row.SKU || row.erp_sku || "").trim();
     const tp = parseFloat(row.tp);
-    return Boolean(sku) && !isNaN(tp) && tp > 0;
+    // We allow tp >= 0 now, only filter out if tp is NaN or if there is no SKU identifier at all
+    return Boolean(sku) && !isNaN(tp);
   });
 
   StorageCache.set(cacheKey, validRows);
