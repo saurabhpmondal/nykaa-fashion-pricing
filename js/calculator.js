@@ -77,10 +77,10 @@ export function getTargetValue(tp, mode, status, continueTpDiff = null, nonConti
 /* Commercials */
 /* ----------------------------- */
 
-export function computeFromSP(sp, tp, mrp) {
+export function computeFromSP(sp, tp, mcp) {
   sp = num(sp);
   tp = num(tp);
-  mrp = num(mrp);
+  mcp = num(mcp);
 
   const taxableValue =
     sp / (1 + GST_RATE);
@@ -140,8 +140,8 @@ export function computeFromSP(sp, tp, mrp) {
     dispatch;
 
   const tdRaw =
-    mrp > 0
-      ? ((mrp - sp) / mrp) * 100
+    mcp > 0
+      ? ((mcp - sp) / mcp) * 100
       : 0;
 
   /* FLOOR ROUND DOWN */
@@ -200,48 +200,34 @@ export function computeFromSP(sp, tp, mrp) {
 
 export function solveSP(
   tp,
-  mrp,
+  mcp,
   mode,
   status,
   continueTpDiff = null,
   nonContinueTpDiff = null
 ) {
   tp = num(tp);
-  mrp = num(mrp);
+  mcp = num(mcp);
 
   const targetPct = getTargetPercent(mode, status, continueTpDiff, nonContinueTpDiff);
   const target = getTargetValue(tp, mode, status, continueTpDiff, nonContinueTpDiff);
 
-  let best = null;
-  let gapMin = Infinity;
+  const A = 1 - COMMISSION_RATE - (COMMISSION_RATE * COMMISSION_GST_RATE) - (TCS_RATE / (1 + GST_RATE)) - (TDS_RATE / (1 + GST_RATE)) - MARKETING_RATE;
+  const returnCODB_const = (RETURN_CHARGE * RETURN_PERCENT) / (100 - RETURN_PERCENT);
+  const B = (2 * FORWARD_TOTAL) + returnCODB_const + DISPATCH_COST;
 
-  const maxSP =
-    mrp > 0
-      ? mrp
-      : SOLVER_MAX;
+  let solvedSP = (target + B) / A;
 
-  for (
-    let sp = 1;
-    sp <= maxSP;
-    sp += SOLVER_STEP
-  ) {
-    const row =
-      computeFromSP(
-        sp,
-        tp,
-        mrp
-      );
-
-    const gap = Math.abs(
-      row.payoutAfterCODB -
-      target
-    );
-
-    if (gap < gapMin) {
-      gapMin = gap;
-      best = row;
-    }
+  if (mcp > 0 && solvedSP > mcp) {
+    solvedSP = mcp;
   }
+
+  if (solvedSP < 1) {
+    solvedSP = 1;
+  }
+
+  const sp = Math.round(solvedSP);
+  const best = computeFromSP(sp, tp, mcp);
 
   return {
     target: round2(target),

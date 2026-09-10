@@ -1,5 +1,5 @@
-export const CSV_URL = "/api/sales-csv";
-export const PRICING_CSV_URL = "/api/pricing-csv";
+export const CSV_URL = "api/sales-csv";
+export const PRICING_CSV_URL = "api/pricing-csv";
 
 export const DIRECT_SALES_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkNC483NRAy-kqGlTTMqvq4GsqNgqcxfzj5QkBA77T_8nXTpHhI3V2MQ3LM3A8m79dOeYBKXndNlzF/pub?gid=1492706460&single=true&output=csv";

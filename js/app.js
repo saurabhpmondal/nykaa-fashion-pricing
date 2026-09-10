@@ -98,29 +98,33 @@ function getCalculatedPricingRows(mode, continueTpDiff, nonContinueTpDiff, nyriO
 
   const computed = validRows.map(row => {
     const tp = num(row.tp);
-    const mrp = num(row.mrp);
+    const mcp = num(row.mcp || row.mrp || row.MCP || row.MRP);
     const erp_sku = (row.erp_sku || "").trim();
     const sku = (row.sku || row.SKU || "").trim();
+    const channel_sku = (row.channel_sku || row.CHANNEL_SKU || "").trim();
+    const brand = (row.Brand || row.brand || row.BRAND || "").trim();
     const url = (row.URL || row.url || "").trim();
     const name = (row.NAME || row.name || "").trim();
 
     const calc = solveSP(
       tp,
-      mrp,
-      mode,
+      mcp,
+      pricingState.mode,
       row.erp_status,
-      continueTpDiff,
-      nonContinueTpDiff
+      pricingState.continueTpDiff,
+      pricingState.nonContinueTpDiff
     );
 
     return {
       erp_sku,
       sku,
+      channel_sku,
+      brand,
       erp_status: row.erp_status || "",
       url,
       name,
       tp,
-      mrp,
+      mcp,
       ...calc
     };
   });

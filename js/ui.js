@@ -95,11 +95,13 @@ export function renderTable(rows, limit) {
           : row.erp_sku
         }
       </td>
+      <td class="font-mono">${row.channel_sku || "N/A"}</td>
       <td class="font-mono">${row.sku}</td>
+      <td>${row.brand || "N/A"}</td>
       <td>${getStatusBadge(row.erp_status)}</td>
 
       <td>${money(row.tp)}</td>
-      <td>${money(row.mrp)}</td>
+      <td>${money(row.mcp)}</td>
 
       <td class="font-bold">${money(row.sp)}</td>
       <td>${row.td}%</td>

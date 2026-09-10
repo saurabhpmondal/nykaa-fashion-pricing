@@ -30,7 +30,12 @@ function parseCSVLine(line) {
 
 export async function fetchCSV(url) {
   try {
-    const res = await fetch(url);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000); // 20s timeout
+
+    const res = await fetch(url, { signal: controller.signal });
+    clearTimeout(timeout);
+
     if (!res.ok) throw new Error(`HTTP error ${res.status}`);
     const text = await res.text();
     const lines = text.split(/\r?\n/).filter(Boolean);
@@ -71,8 +76,11 @@ export async function loadRows(forceRefresh = false) {
 
   let rows = await fetchCSV(PRICING_CSV_URL);
   if (!rows || !rows.length) {
-    console.warn("Proxy pricing fetch failed, trying direct Google Sheets URL...");
+    console.warn("Proxy pricing fetch failed (this is expected on static hosts like GitHub Pages), trying direct Google Sheets URL...");
     rows = await fetchCSV(DIRECT_PRICING_URL);
+    if (!rows || !rows.length) {
+      console.error("Critical Error: Failed to load pricing data from both proxy and direct URL. If you are on GitHub Pages, ensure your Google Sheet is published to the web and allows CORS, or use the provided full-stack deployment URL.");
+    }
   }
 
   const allRows = rows || [];
@@ -101,8 +109,11 @@ export async function loadSalesRows(forceRefresh = false) {
 
   let rows = await fetchCSV(CSV_URL);
   if (!rows || !rows.length) {
-    console.warn("Proxy sales fetch failed, trying direct Google Sheets URL...");
+    console.warn("Proxy sales fetch failed (this is expected on static hosts like GitHub Pages), trying direct Google Sheets URL...");
     rows = await fetchCSV(DIRECT_SALES_URL);
+    if (!rows || !rows.length) {
+      console.error("Critical Error: Failed to load sales data from both proxy and direct URL.");
+    }
   }
 
   const salesRows = rows || [];

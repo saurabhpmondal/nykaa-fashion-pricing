@@ -100,11 +100,13 @@ export function exportRows(
   /* Headers */
   lines.push([
     "ERP SKU",
+    "Channel SKU",
     "SKU",
+    "Brand",
     "Status",
     "Target Rule",
     "TP",
-    "MRP",
+    "MCP",
     "SP",
     "TD%",
     "Taxable Value",
@@ -131,7 +133,9 @@ export function exportRows(
   cleanRows.forEach(row => {
     lines.push([
       row.erp_sku,
+      row.channel_sku,
       row.sku,
+      row.brand,
       row.erp_status,
       targetRule(
         state.mode,
@@ -139,7 +143,7 @@ export function exportRows(
         row.targetPercent
       ),
       row.tp,
-      row.mrp,
+      row.mcp,
       row.sp,
       row.td,
       row.taxableValue,
@@ -149,7 +153,7 @@ export function exportRows(
       row.commInvoice,
       row.forward,
       row.tcs,
-      row.bankSettlement,
+      row.bank_settlement || row.bankSettlement,
       row.tds,
       row.finalPayout,
       row.marketing,

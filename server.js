@@ -1,12 +1,21 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3000;
+
+app.use(cors());
+
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
 
 const SALES_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkNC483NRAy-kqGlTTMqvq4GsqNgqcxfzj5QkBA77T_8nXTpHhI3V2MQ3LM3A8m79dOeYBKXndNlzF/pub?gid=1492706460&single=true&output=csv";
 const PRICING_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQkNC483NRAy-kqGlTTMqvq4GsqNgqcxfzj5QkBA77T_8nXTpHhI3V2MQ3LM3A8m79dOeYBKXndNlzF/pub?gid=0&single=true&output=csv";
@@ -25,14 +34,25 @@ app.get('/api/sales-csv', async (req, res) => {
       res.setHeader('Content-Type', 'text/csv');
       return res.send(cache.sales.data);
     }
-    const response = await fetch(SALES_SHEET_URL);
+
+    console.log(`Fetching Sales CSV from Google Sheets...`);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+
+    const response = await fetch(SALES_SHEET_URL, { signal: controller.signal });
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      throw new Error(`Google Sheets responded with ${response.status}`);
+    }
+
     const csvText = await response.text();
     cache.sales = { data: csvText, time: now };
     res.setHeader('Content-Type', 'text/csv');
     res.send(csvText);
   } catch (err) {
-    console.error('Error fetching sales CSV proxy:', err);
-    res.status(500).send('Error fetching sales CSV');
+    console.error('Error fetching sales CSV proxy:', err.message);
+    res.status(500).send(`Error fetching sales CSV: ${err.message}`);
   }
 });
 
@@ -43,14 +63,25 @@ app.get('/api/pricing-csv', async (req, res) => {
       res.setHeader('Content-Type', 'text/csv');
       return res.send(cache.pricing.data);
     }
-    const response = await fetch(PRICING_SHEET_URL);
+
+    console.log(`Fetching Pricing CSV from Google Sheets...`);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+
+    const response = await fetch(PRICING_SHEET_URL, { signal: controller.signal });
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      throw new Error(`Google Sheets responded with ${response.status}`);
+    }
+
     const csvText = await response.text();
     cache.pricing = { data: csvText, time: now };
     res.setHeader('Content-Type', 'text/csv');
     res.send(csvText);
   } catch (err) {
-    console.error('Error fetching pricing CSV proxy:', err);
-    res.status(500).send('Error fetching pricing CSV');
+    console.error('Error fetching pricing CSV proxy:', err.message);
+    res.status(500).send(`Error fetching pricing CSV: ${err.message}`);
   }
 });
 
