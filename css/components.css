@@ -389,7 +389,8 @@ thead th {
 
 thead th:first-child,
 thead th:nth-child(2),
-thead th:nth-child(3) {
+thead th:nth-child(3),
+thead th:nth-child(4) {
   text-align: left;
 }
 
@@ -404,7 +405,8 @@ tbody td {
 
 tbody td:first-child,
 tbody td:nth-child(2),
-tbody td:nth-child(3) {
+tbody td:nth-child(3),
+tbody td:nth-child(4) {
   text-align: left;
 }
 
@@ -543,6 +545,14 @@ tbody tr:hover {
   border-color: var(--blue);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
   outline: none;
+}
+
+.toolbar-select:disabled {
+  background: #fdf2f8;
+  border-color: #fbcfe8;
+  color: #be185d;
+  cursor: default;
+  opacity: 0.95;
 }
 
 .select-chevron {

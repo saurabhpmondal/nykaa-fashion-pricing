@@ -85,11 +85,10 @@ export async function loadRows(forceRefresh = false) {
 
   const allRows = rows || [];
   
-  // Only keep where sku column has any identifier
+  // Strictly keep only rows where sku column has a non-empty value and valid tp
   const validRows = allRows.filter(row => {
-    const sku = (row.sku || row.SKU || row.erp_sku || "").trim();
+    const sku = (row.sku || row.SKU || "").trim();
     const tp = parseFloat(row.tp);
-    // We allow tp >= 0 now, only filter out if tp is NaN or if there is no SKU identifier at all
     return Boolean(sku) && !isNaN(tp);
   });
 

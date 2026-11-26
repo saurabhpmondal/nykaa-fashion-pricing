@@ -65,7 +65,7 @@ export function renderTable(rows, limit) {
   if (!rows || !rows.length) {
     body.innerHTML = `
       <tr>
-        <td colspan="25" style="text-align: center; padding: 48px 20px; background: #fafafa;">
+        <td colspan="28" style="text-align: center; padding: 48px 20px; background: #fafafa;">
           <div style="max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 12px;">
             <div style="width: 48px; height: 48px; border-radius: 12px; background: #eff6ff; color: #2563eb; display: flex; align-items: center; justify-content: center;">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
@@ -97,11 +97,12 @@ export function renderTable(rows, limit) {
       </td>
       <td class="font-mono">${row.channel_sku || "N/A"}</td>
       <td class="font-mono">${row.sku}</td>
+      <td class="font-mono">${row.product_id || "N/A"}</td>
       <td>${row.brand || "N/A"}</td>
       <td>${getStatusBadge(row.erp_status)}</td>
 
       <td>${money(row.tp)}</td>
-      <td>${money(row.mcp)}</td>
+      <td>${money(row.mrp ?? row.mcp)}</td>
 
       <td class="font-bold">${money(row.sp)}</td>
       <td>${row.td}%</td>

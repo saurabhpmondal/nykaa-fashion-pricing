@@ -3,7 +3,7 @@
  * Provides fast local caching for sales rows, pricing catalog, and generated pricing results.
  */
 
-const CACHE_PREFIX = "nykaa_pricing_app_v2_";
+const CACHE_PREFIX = "nykaa_pricing_app_v6_";
 const MEMORY_CACHE = new Map();
 
 function isStorageAvailable() {

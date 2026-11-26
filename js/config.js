@@ -38,3 +38,18 @@ export const SOLVER_MAX = 50000;
 export const MODE_BAU = "BAU";
 export const MODE_EVENT = "EVENT";
 export const MODE_BIG_EVENT = "BIG EVENT";
+
+/* Nyri Brand Commercials & Pricing Rules */
+export const NYRI_GST_RATE = 0.05;
+export const NYRI_COMMISSION_RATE = 0.46;
+export const NYRI_COMMISSION_GST_RATE = 0.18;
+export const NYRI_TCS_RATE = 0.005;
+export const NYRI_DISPATCH_COST = 30;
+
+export const NYRI_BAU_TD = 55;
+export const NYRI_EVENT_TD = 57;
+export const NYRI_BIG_EVENT_TARGET_PCT = -19;
+export const NYRI_BIG_EVENT_CONTINUE_TARGET_PCT = -19;
+export const NYRI_BIG_EVENT_NON_CONTINUE_TARGET_PCT = -40;
+
+

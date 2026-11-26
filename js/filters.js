@@ -6,9 +6,12 @@ import { getTargetPercent } from "./calculator.js";
 /* -------------------------------- */
 
 export function isNyriSku(row) {
+  const brand = (row.Brand || row.brand || row.BRAND || "").trim().toUpperCase();
+  if (brand === "NYRI") return true;
   const sku = (row.sku || row.SKU || "").trim().toUpperCase();
   const erpSku = (row.erp_sku || "").trim().toUpperCase();
-  return sku.startsWith("NYRI") || erpSku.startsWith("NYRI");
+  const channelSku = (row.channel_sku || row.CHANNEL_SKU || "").trim().toUpperCase();
+  return sku.startsWith("NYRI") || erpSku.startsWith("NYRI") || channelSku.endsWith("NYRI");
 }
 
 export function applyFilters(rows, state) {
@@ -17,6 +20,9 @@ export function applyFilters(rows, state) {
   const nyriOnly = Boolean(state.nyriOnly);
 
   return rows.filter(row => {
+    /* Strictly exclude rows with blank SKU */
+    if (!String(row.sku || row.SKU || "").trim()) return false;
+
     /* NYRI Toggle Filter */
     const isNyri = isNyriSku(row);
     if (nyriOnly && !isNyri) return false;
@@ -26,7 +32,10 @@ export function applyFilters(rows, state) {
     const matchSearch =
       !query ||
       includesText(row.erp_sku, query) ||
+      includesText(row.channel_sku, query) ||
       includesText(row.sku, query) ||
+      includesText(row.product_id, query) ||
+      includesText(row.brand, query) ||
       includesText(row.name, query);
 
     if (!matchSearch) return false;
@@ -47,6 +56,8 @@ export function getStatuses(rows, nyriOnly = false) {
   const map = {};
 
   rows.forEach(row => {
+    if (!String(row.sku || row.SKU || "").trim()) return;
+
     const isNyri = isNyriSku(row);
     if (nyriOnly && !isNyri) return;
     if (!nyriOnly && isNyri) return;

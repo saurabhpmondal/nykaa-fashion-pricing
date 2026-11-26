@@ -26,7 +26,10 @@ function cleanName(v) {
     .replace(/\s+/g, "_");
 }
 
-function targetRule(mode, status, rowTargetPercent) {
+function targetRule(mode, status, rowTargetPercent, rowTargetRuleLabel) {
+  if (rowTargetRuleLabel) {
+    return rowTargetRuleLabel;
+  }
   if (typeof rowTargetPercent === "number") {
     return rowTargetPercent >= 0 ? `TP+${rowTargetPercent}%` : `TP${rowTargetPercent}%`;
   }
@@ -51,16 +54,15 @@ export function exportRows(
   const now =
     getNowParts();
 
-  const nyriTag = state.nyriOnly ? "_nyri_only" : "";
-
-  const fileName =
-    `nykaa_${cleanName(
-      state.mode
-    )}_cont_${cleanName(
-      state.continueTpDiff
-    )}_noncont_${cleanName(
-      state.nonContinueTpDiff
-    )}${nyriTag}_${now.stamp}.csv`;
+  const fileName = state.nyriOnly
+    ? `nykaa_nyri_${cleanName(state.mode)}_${now.stamp}.csv`
+    : `nykaa_${cleanName(
+        state.mode
+      )}_cont_${cleanName(
+        state.continueTpDiff
+      )}_noncont_${cleanName(
+        state.nonContinueTpDiff
+      )}_${now.stamp}.csv`;
 
   const lines = [];
 
@@ -77,12 +79,27 @@ export function exportRows(
   lines.push(
     `"Pricing Mode","${state.mode}"`
   );
-  lines.push(
-    `"Continue TP Diff","${state.continueTpDiff >= 0 ? '+' : ''}${state.continueTpDiff}%"`
-  );
-  lines.push(
-    `"Non-Continue TP Diff","${state.nonContinueTpDiff >= 0 ? '+' : ''}${state.nonContinueTpDiff}%"`
-  );
+  if (state.nyriOnly) {
+    const nyriRuleDesc =
+      state.mode === "BAU"
+        ? "Fixed TD 55% on MRP"
+        : state.mode === "EVENT"
+          ? "Fixed TD 57% on MRP"
+          : "Continue TP -19% / Non-Continue TP -40% (Derived Rounded TD%)";
+    lines.push(
+      `"Pricing Logic","NYRI Brand Logic (Comm 46%, Comm GST 18%, TCS 0.5%, Dispatch ₹30)"`
+    );
+    lines.push(
+      `"Nyri Rule","${nyriRuleDesc}"`
+    );
+  } else {
+    lines.push(
+      `"Continue TP Diff","${state.continueTpDiff >= 0 ? '+' : ''}${state.continueTpDiff}%"`
+    );
+    lines.push(
+      `"Non-Continue TP Diff","${state.nonContinueTpDiff >= 0 ? '+' : ''}${state.nonContinueTpDiff}%"`
+    );
+  }
   lines.push(
     `"NYRI Filter","${state.nyriOnly ? 'NYRI SKUs Only' : 'Standard SKUs (NYRI Excluded)'}"`
   );
@@ -102,11 +119,12 @@ export function exportRows(
     "ERP SKU",
     "Channel SKU",
     "SKU",
+    "Product Id",
     "Brand",
     "Status",
     "Target Rule",
     "TP",
-    "MCP",
+    "MRP",
     "SP",
     "TD%",
     "Taxable Value",
@@ -135,15 +153,17 @@ export function exportRows(
       row.erp_sku,
       row.channel_sku,
       row.sku,
+      row.product_id || "",
       row.brand,
       row.erp_status,
       targetRule(
         state.mode,
         row.erp_status,
-        row.targetPercent
+        row.targetPercent,
+        row.targetRuleLabel
       ),
       row.tp,
-      row.mcp,
+      row.mrp ?? row.mcp,
       row.sp,
       row.td,
       row.taxableValue,

@@ -92,9 +92,9 @@
         </div>
       </div>
 
-      <!-- 2. Continue TP Diff -->
+      <!-- 2. Continue TP Diff / Nyri Rule -->
       <div class="toolbar-item toolbar-item-select">
-        <label for="continueTpDiffSelect" class="toolbar-label">Continue TP Diff</label>
+        <label id="continueTpDiffLabel" for="continueTpDiffSelect" class="toolbar-label">Continue TP Diff</label>
         <div class="select-wrapper">
           <select id="continueTpDiffSelect" class="toolbar-select">
             <option value="5">+5%</option>
@@ -104,9 +104,9 @@
         </div>
       </div>
 
-      <!-- 3. Non-Continue TP Diff -->
+      <!-- 3. Non-Continue TP Diff / Nyri Commercials -->
       <div class="toolbar-item toolbar-item-select">
-        <label for="nonContinueTpDiffSelect" class="toolbar-label">Non-Continue TP Diff</label>
+        <label id="nonContinueTpDiffLabel" for="nonContinueTpDiffSelect" class="toolbar-label">Non-Continue TP Diff</label>
         <div class="select-wrapper">
           <select id="nonContinueTpDiffSelect" class="toolbar-select">
             <option value="0">0%</option>
@@ -162,8 +162,8 @@
         <div class="summary-stat"><span class="summary-stat-label">Showing:</span> <span id="visibleCount" class="summary-stat-val">0</span></div>
         <div class="summary-divider"></div>
         <div class="summary-pill-item"><span class="pill-label">Mode:</span> <span id="modeLabel" class="badge badge-info">BAU</span></div>
-        <div class="summary-pill-item"><span class="pill-label">Continue:</span> <span id="continueDiffLabel" class="badge badge-success">+5%</span></div>
-        <div class="summary-pill-item"><span class="pill-label">Non-Continue:</span> <span id="nonContinueDiffLabel" class="badge badge-warning">0%</span></div>
+        <div class="summary-pill-item"><span id="continuePillLabel" class="pill-label">Continue:</span> <span id="continueDiffLabel" class="badge badge-success">+5%</span></div>
+        <div class="summary-pill-item"><span id="nonContinuePillLabel" class="pill-label">Non-Continue:</span> <span id="nonContinueDiffLabel" class="badge badge-warning">0%</span></div>
         <div class="summary-pill-item"><span class="pill-label">NYRI:</span> <span id="nyriStatusLabel" class="badge badge-neutral">OFF (Excluded)</span></div>
       </div>
       <div class="summary-filter-right">
@@ -185,10 +185,11 @@
               <th>ERP SKU</th>
               <th>Channel SKU</th>
               <th>SKU</th>
+              <th>Product Id</th>
               <th>Brand</th>
               <th>Status</th>
               <th>TP</th>
-              <th>MCP</th>
+              <th>MRP</th>
               <th>SP</th>
               <th>TD%</th>
               <th>Taxable Value</th>
@@ -243,11 +244,11 @@
           <div class="confirm-value font-bold" id="confirmModalMode">BAU</div>
         </div>
         <div class="confirm-item">
-          <div class="confirm-label">Continue TP Diff</div>
+          <div class="confirm-label" id="confirmModalContinueLabel">Continue TP Diff</div>
           <div class="confirm-value text-blue font-bold" id="confirmModalContinue">+5%</div>
         </div>
         <div class="confirm-item">
-          <div class="confirm-label">Non-Continue TP Diff</div>
+          <div class="confirm-label" id="confirmModalNonContinueLabel">Non-Continue TP Diff</div>
           <div class="confirm-value font-bold" style="color: #9333ea;" id="confirmModalNonContinue">0%</div>
         </div>
         <div class="confirm-item">
@@ -262,7 +263,7 @@
 
       <div class="confirm-note">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <span>The engine will solve optimal SP, Trade Discounts, GST, marketplace commissions, and post-CODB payouts for each SKU according to these target diffs.</span>
+        <span id="confirmModalNote">The engine will solve optimal SP, Trade Discounts, GST, marketplace commissions, and post-CODB payouts for each SKU according to these target diffs.</span>
       </div>
     </div>
 
